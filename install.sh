@@ -27,11 +27,14 @@ link_file() {
 }
 
 # KDE configs
-for f in kglobalshortcutsrc kwinrc plasma-org.kde.plasma.desktop-appletsrc plasmashellrc; do
-    if [ -f "$DOTFILES_DIR/kde/.config/$f" ]; then
-        link_file "$DOTFILES_DIR/kde/.config/$f" "$HOME/.config/$f"
-    fi
-done
+if [ -d "$DOTFILES_DIR/kde/.config" ]; then
+    for f in "$DOTFILES_DIR/kde/.config/"*; do
+        if [ -f "$f" ]; then
+            filename=$(basename "$f")
+            link_file "$f" "$HOME/.config/$filename"
+        fi
+    done
+fi
 
 # Kitty and Nvim (linking the whole directory)
 if [ -d "$DOTFILES_DIR/kitty/.config/kitty" ]; then
