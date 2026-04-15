@@ -46,9 +46,12 @@ echo "Applying portable KDE settings with $KWRITE..."
 "$KWRITE" --file kxkbrc --group Layout --key "VariantList" "altgr-intl"
 "$KWRITE" --file kxkbrc --group Layout --key "Options"     "terminate:ctrl_alt_bksp"
 
-# Live-reload keyboard layout if qdbus is available
+# Best-effort live reload of KWin (picks up tiling / virtual desktops / shortcuts
+# from kwinrc without needing a logout). Keyboard layout (kxkbrc) is re-read on
+# login, so we don't try to hot-reload it — the Plasma 6 dbus method differs
+# across versions and qdbus6 can segfault probing it.
 if [ -n "$QDBUS" ]; then
-    "$QDBUS" org.kde.keyboard /Layouts org.kde.KeyboardLayouts.reconfigure 2>/dev/null || true
+    "$QDBUS" org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
 fi
 
 echo "KDE settings applied. Log out and back in for any shortcut changes to register."
