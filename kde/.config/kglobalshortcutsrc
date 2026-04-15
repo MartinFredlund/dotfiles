@@ -272,3 +272,7 @@ _launch=Ctrl+Alt+T
 
 [services][org.kde.konsole.desktop]
 _launch=
+
+[services][org.kde.spectacle.desktop]
+CurrentMonitorScreenShot=
+OpenWithoutScreenshot=
