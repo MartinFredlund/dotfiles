@@ -54,4 +54,4 @@ if [ -n "$QDBUS" ]; then
     "$QDBUS" org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
 fi
 
-echo "KDE settings applied. Log out and back in for any shortcut changes to register."
+echo "KDE settings applied."

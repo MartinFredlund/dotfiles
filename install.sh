@@ -96,7 +96,7 @@ link_file() {
 # --- 6. Pre-install Neovim plugins (headless) ---
 if command -v nvim >/dev/null; then
     echo "Syncing Neovim plugins..."
-    nvim --headless "+Lazy! sync" +qa 2>/dev/null || echo "Nvim plugin sync skipped (open nvim to finish setup)."
+    nvim --headless "+Lazy! restore" +qa 2>/dev/null || echo "Nvim plugin install skipped (open nvim to finish setup)."
 fi
 
 # --- 7. KDE keybinds / layout (only if running KDE) ---
@@ -113,4 +113,4 @@ rmdir "$BACKUP_DIR" 2>/dev/null || true
 trap - ERR
 echo ""
 echo "--- Dotfiles installed successfully! ---"
-echo "Log out and back in for KDE keybinds and fonts to fully apply."
+echo "Reboot the system for KDE keybinds, keyboard layout, and fonts to fully apply."

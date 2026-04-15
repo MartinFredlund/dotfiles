@@ -40,5 +40,5 @@ git add . && git commit -m "Update configs" && git push
 
 ## Notes
 
-- Log out and back in after install for KDE keybinds and font changes to fully register.
+- Reboot after install for KDE keybinds, keyboard layout, and font changes to fully register.
 - Arch Linux only (uses `pacman`).
