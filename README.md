@@ -1,44 +1,44 @@
 # Dotfiles
 
-My personal configuration files for KDE Plasma, Kitty, and Neovim.
+Personal configs for Kitty, Neovim, and the coding-relevant slice of KDE Plasma
+(keybinds, keyboard layout, tiling). Aesthetic KDE settings (panels, wallpapers,
+applets) are intentionally left per-machine.
 
 ## Structure
 
-- **kde/**: KDE Plasma configurations (shortcuts, window manager, and desktop applets).
-- **kitty/**: Kitty terminal emulator configuration and themes.
-- **nvim/**: Neovim configuration based on Kickstart.nvim.
+- **kitty/**: Kitty terminal config.
+- **nvim/**: Neovim config (Kickstart-based).
+- **kde/sync_kde.sh**: Writes portable KDE settings via `kwriteconfig6`/`kwriteconfig5`.
 
-## Installation
+## Install / Sync
 
-The repository includes an `install.sh` script that automates the process of backing up existing configurations and symlinking the files from this directory to `~/.config`.
+One command, safe to re-run:
 
 ```bash
-cd ~/dotfiles
-./install.sh
+cd ~/dotfiles && ./install.sh
 ```
 
-### What it does:
-1. Creates a timestamped backup of any existing non-symlinked configs in `~/.dotfiles_backup_YYYYMMDD_HHMMSS`.
-2. Removes existing symlinks to prevent conflicts.
-3. Symlinks the following:
-   - `kde/.config/*` -> `~/.config/`
-   - `kitty/.config/kitty` -> `~/.config/kitty`
-   - `nvim/.config/nvim` -> `~/.config/nvim`
+The script:
+1. `git pull --ff-only` (only if the working tree is clean).
+2. Refreshes the pacman DB and installs required packages.
+3. Installs the JetBrainsMono Nerd Font (repo, falling back to GitHub release).
+4. Backs up any non-symlinked existing configs to `~/.dotfiles_backup_<timestamp>/`.
+5. Symlinks `kitty` and `nvim` configs into `~/.config/`.
+6. Headlessly syncs Neovim plugins (`nvim --headless +Lazy! sync +qa`).
+7. If running under KDE, applies portable keybinds/layout/tiling.
 
-## Syncing Changes
+If any step fails, previously-moved configs are restored from the backup dir.
 
-### Push Changes (Local to Remote)
-Since the files in `~/.config` are symlinks, any changes made within the applications are reflected immediately in this repository.
+## Pushing changes
 
-1. Review changes: `git status`
-2. Stage and commit: `git add . && git commit -m "Update configs"`
-3. Push to your remote: `git push`
+Kitty and Neovim changes are live (symlinked). For KDE, edit `kde/sync_kde.sh`
+directly — the script is the source of truth, not your live `~/.config/*rc`.
 
-### Pull Changes (Remote to Local)
-To update your local configuration from the remote repository:
+```bash
+git add . && git commit -m "Update configs" && git push
+```
 
-1. Pull latest changes: `git pull`
-2. Re-run the installation script if new files were added: `./install.sh`
+## Notes
 
----
-Note: For KDE changes to fully apply after a fresh sync, it is recommended to log out and back in.
+- Log out and back in after install for KDE keybinds and font changes to fully register.
+- Arch Linux only (uses `pacman`).
