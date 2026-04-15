@@ -32,7 +32,11 @@ echo "Applying portable KDE settings with $KWRITE..."
 "$KWRITE" --file kglobalshortcutsrc --group kmix --key "increase_volume" "Volume Up,Volume Up,Increase Volume"
 
 # Session
-"$KWRITE" --file kglobalshortcutsrc --group ksmserver --key "Lock Session" "Meta+L\tScreensaver,Meta+L\tScreensaver,Lock Session"
+"$KWRITE" --file kglobalshortcutsrc --group ksmserver --key "Lock Session" "Meta+L,Meta+L,Lock Session"
+
+# Launch kitty with Ctrl+Alt+T
+"$KWRITE" --file kglobalshortcutsrc --group "services" --group "kitty.desktop" --key "_launch" "Ctrl+Alt+T,none,Launch kitty"
+"$KWRITE" --file kglobalshortcutsrc --group "services" --group "kitty.desktop" --key "_k_friendly_name" "kitty"
 
 # --- Session: start with an empty session instead of restoring last one ---
 "$KWRITE" --file ksmserverrc --group General --key "loginMode" "emptySession"
