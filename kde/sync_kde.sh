@@ -34,17 +34,24 @@ echo "Applying portable KDE settings with $KWRITE..."
 # Session
 "$KWRITE" --file kglobalshortcutsrc --group ksmserver --key "Lock Session" "Meta+L\tScreensaver,Meta+L\tScreensaver,Lock Session"
 
+# --- Session: start with an empty session instead of restoring last one ---
+"$KWRITE" --file ksmserverrc --group General --key "loginMode" "emptySession"
+
 # --- Virtual desktops + tiling ---
-"$KWRITE" --file kwinrc --group Desktops        --key "Number" 2
+"$KWRITE" --file kwinrc --group Desktops        --key "Number" 1
 "$KWRITE" --file kwinrc --group Desktops        --key "Rows"   1
 "$KWRITE" --file kwinrc --group Effect-overview --key "BorderActivate" 3
 "$KWRITE" --file kwinrc --group "Tiling" --key "padding" 4
 "$KWRITE" --file kwinrc --group "Tiling" --key "tiles" '{"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}'
 
 # --- Keyboard layout (standardized across machines) ---
-"$KWRITE" --file kxkbrc --group Layout --key "LayoutList"  "us"
-"$KWRITE" --file kxkbrc --group Layout --key "VariantList" "altgr-intl"
-"$KWRITE" --file kxkbrc --group Layout --key "Options"     "terminate:ctrl_alt_bksp"
+# Uses the custom "us_sv" variant defined in ~/.config/xkb/symbols/custom
+# (symlinked by install.sh). Gives plain US layout with å ä ö on AltGr+[ ' ;.
+"$KWRITE" --file kxkbrc --group Layout --key "Use"         "true"
+"$KWRITE" --file kxkbrc --group Layout --key "LayoutList"  "custom"
+"$KWRITE" --file kxkbrc --group Layout --key "VariantList" "us_sv"
+"$KWRITE" --file kxkbrc --group Layout --key "Options"          "terminate:ctrl_alt_bksp,caps:swapescape"
+"$KWRITE" --file kxkbrc --group Layout --key "ResetOldOptions"  "true"
 
 # Best-effort live reload of KWin (picks up tiling / virtual desktops / shortcuts
 # from kwinrc without needing a logout). Keyboard layout (kxkbrc) is re-read on

@@ -57,14 +57,18 @@ if ! pacman -Qi ttf-jetbrains-mono-nerd >/dev/null 2>&1; then
 fi
 
 # --- 3. JetBrainsMono Nerd Font (manual fallback) ---
-if ! fc-list | grep -qi "JetBrainsMono Nerd Font"; then
+font_installed() {
+    fc-list | grep -qiE "jetbrainsmono.*nerd" \
+        || ls "$HOME/.local/share/fonts"/JetBrainsMono*NerdFont* >/dev/null 2>&1
+}
+if ! font_installed; then
     echo "JetBrainsMono Nerd Font not found. Installing manually..."
     mkdir -p "$HOME/.local/share/fonts"
     tmp_zip=$(mktemp --suffix=.zip)
     curl -fLo "$tmp_zip" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
     unzip -o "$tmp_zip" -d "$HOME/.local/share/fonts" >/dev/null
     rm "$tmp_zip"
-    fc-cache -f
+    fc-cache -f "$HOME/.local/share/fonts"
 fi
 
 # --- 4. Symlink helper ---
@@ -91,7 +95,17 @@ link_file() {
 
 # --- 5. Symlink app configs ---
 [ -d "$DOTFILES_DIR/kitty/.config/kitty" ] && link_file "$DOTFILES_DIR/kitty/.config/kitty" "$HOME/.config/kitty"
+[ -f "$DOTFILES_DIR/kitty/.local/share/applications/kitty.desktop" ] && \
+    link_file "$DOTFILES_DIR/kitty/.local/share/applications/kitty.desktop" "$HOME/.local/share/applications/kitty.desktop"
 [ -d "$DOTFILES_DIR/nvim/.config/nvim" ]   && link_file "$DOTFILES_DIR/nvim/.config/nvim"   "$HOME/.config/nvim"
+
+# Custom XKB variant (Swedish letters on AltGr over US layout)
+[ -f "$DOTFILES_DIR/kde/xkb/symbols/custom" ] && \
+    link_file "$DOTFILES_DIR/kde/xkb/symbols/custom" "$HOME/.config/xkb/symbols/custom"
+
+# Plasma session env var so KWin picks up ~/.config/xkb
+[ -f "$DOTFILES_DIR/kde/plasma-workspace/env/00-xkb.sh" ] && \
+    link_file "$DOTFILES_DIR/kde/plasma-workspace/env/00-xkb.sh" "$HOME/.config/plasma-workspace/env/00-xkb.sh"
 
 # --- 6. Pre-install Neovim plugins (headless) ---
 if command -v nvim >/dev/null; then
